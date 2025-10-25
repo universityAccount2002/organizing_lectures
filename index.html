@@ -35,44 +35,7 @@
             padding: 20px;
         }
 
-        .config-section {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
 
-        .config-section h3 {
-            font-size: 1em;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-
-        .config-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto;
-            gap: 10px;
-            align-items: end;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .input-group label {
-            font-size: 0.85em;
-            color: #555;
-            margin-bottom: 3px;
-        }
-
-        .input-group input {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-            font-size: 0.9em;
-        }
 
         .btn {
             padding: 8px 20px;
@@ -271,26 +234,6 @@
     </div>
 
     <div class="container">
-        <div class="config-section">
-            <h3>⚙️ إعدادات المستودع</h3>
-            <div class="config-inputs">
-                <div class="input-group">
-                    <label>اسم المستخدم (Owner)</label>
-                    <input type="text" id="githubOwner" placeholder="username" value="">
-                </div>
-                <div class="input-group">
-                    <label>اسم المستودع (Repository)</label>
-                    <input type="text" id="githubRepo" placeholder="repo-name" value="">
-                </div>
-                <div class="input-group">
-                    <label>الفرع (Branch)</label>
-                    <input type="text" id="githubBranch" placeholder="main" value="main">
-                </div>
-                <button class="btn btn-primary" onclick="saveConfig()">حفظ</button>
-            </div>
-            <div id="configAlert" style="margin-top: 10px;"></div>
-        </div>
-
         <div class="content-area">
             <div class="sidebar">
                 <h3>المواد الدراسية</h3>
@@ -320,55 +263,15 @@
     </div>
 
     <script>
-        let config = {
-            owner: '',
-            repo: '',
+        // إعدادات GitHub الثابتة
+        const config = {
+            owner: 'universityAccount2002',
+            repo: 'organizing_lectures',
             branch: 'main'
         };
         
         let selectedSubject = null;
         let selectedType = 'theory';
-
-        // تحميل الإعدادات من localStorage
-        function loadConfig() {
-            const saved = localStorage.getItem('githubConfig');
-            if (saved) {
-                config = JSON.parse(saved);
-                document.getElementById('githubOwner').value = config.owner;
-                document.getElementById('githubRepo').value = config.repo;
-                document.getElementById('githubBranch').value = config.branch;
-            }
-        }
-
-        // حفظ الإعدادات
-        function saveConfig() {
-            config.owner = document.getElementById('githubOwner').value.trim();
-            config.repo = document.getElementById('githubRepo').value.trim();
-            config.branch = document.getElementById('githubBranch').value.trim() || 'main';
-
-            if (!config.owner || !config.repo) {
-                showAlert('يرجى إدخال اسم المستخدم واسم المستودع', 'error');
-                return;
-            }
-
-            localStorage.setItem('githubConfig', JSON.stringify(config));
-            showAlert('تم حفظ الإعدادات بنجاح!', 'info');
-
-            // إعادة تحميل المحاضرات إذا كان هناك مادة محددة
-            if (selectedSubject) {
-                loadLectures(selectedSubject, selectedType);
-            }
-        }
-
-        function showAlert(message, type) {
-            const alertDiv = document.getElementById('configAlert');
-            alertDiv.className = type === 'error' ? 'alert alert-error' : 'alert alert-info';
-            alertDiv.textContent = message;
-            setTimeout(() => {
-                alertDiv.textContent = '';
-                alertDiv.className = '';
-            }, 3000);
-        }
 
         // التعامل مع اختيار المادة
         document.querySelectorAll('.subject-item').forEach(item => {
@@ -396,12 +299,6 @@
         // تحميل المحاضرات من GitHub
         async function loadLectures(subject, type) {
             const contentArea = document.getElementById('contentArea');
-
-            if (!config.owner || !config.repo) {
-                contentArea.innerHTML = '<div class="alert alert-info">يرجى إدخال إعدادات GitHub أعلاه</div>';
-                return;
-            }
-
             contentArea.innerHTML = '<div class="loading">جاري تحميل المحاضرات...</div>';
 
             try {
@@ -512,9 +409,6 @@
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
         }
-
-        // تحميل الإعدادات عند بدء التشغيل
-        loadConfig();
     </script>
 </body>
 </html>
