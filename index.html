@@ -252,7 +252,7 @@
             <div class="sidebar">
                 <h3>المواد الدراسية</h3>
                 <ul class="subject-list" id="subjectList">
-                    <li class="subject-item" data-subject="لغات-برمجة">💻 لغات برمجة</li>
+                    <li class="subject-item" data-subject="لغات-برمجة" id="btnStats" >💻 لغات برمجة</li>
                     <li class="subject-item" data-subject="وسائط-متعددة">🎬 وسائط متعددة</li>
                     <li class="subject-item" data-subject="شبكات-عصبونية">🧠 شبكات عصبونية</li>
                     <li class="subject-item" data-subject="برمجة-تفرعية">⚡ برمجة تفرعية</li>
@@ -263,8 +263,8 @@
 
             <div class="main-content">
                 <div class="type-tabs" id="typeTabs" style="display: none;">
-                    <button class="type-tab active" data-type="نظري">📖 نظري</button>
-                    <button class="type-tab" data-type="عملي">🔧 عملي</button>
+                    <button class="type-tab active" data-type="نظري" id="btnPractical">📖 نظري</button>
+                    <button class="type-tab" data-type="عملي" >🔧 عملي</button>
                     <!--<button class="type-tab" data-type="Gite">Gite</button>
                     <button class="type-tab" data-type="الكميت">الكميت</button>-->
                     
@@ -283,6 +283,19 @@
     <div class="footer">
         <p>طور بواسط <b>claude.ai</b></p>
     </div>
+    
+    <script>
+        window.addEventListener("DOMContentLoaded", function() {
+            // اضغط على زر مادة الإحصاء
+            document.getElementById("btnStats").click();
+
+            // انتظر نصف ثانية (500 مللي ثانية) ثم اضغط على زر القسم العملي
+            setTimeout(function() {
+                document.getElementById("btnPractical").click();
+            }, 500);
+        });
+    </script>
+
 
     <script>
         // إعدادات GitHub الثابتة
