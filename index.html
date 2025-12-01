@@ -287,97 +287,48 @@
     </script>
 
 <script>
-const config = {
-    owner: "universityAccount2002",
-    repo: "organizing_lectures",
-    branch: "main"
-};
+const owner="universityAccount2002",repo="organizing_lectures",branch="main";
+let subject="", type="نظري";
 
-let selectedSubject = null;
-let selectedType = "نظري";
-
-document.querySelectorAll(".subject-item").forEach(item => {
-    item.addEventListener("click", () => {
-        selectedSubject = item.dataset.subject;
-
-        document.querySelectorAll(".subject-item").forEach(i => i.classList.remove("active"));
-        item.classList.add("active");
-
-        document.getElementById("typeTabs").style.display = "flex";
-
-        loadFiles();
-    });
+document.querySelectorAll(".subject-item").forEach(s=>s.onclick=()=>{
+    subject=s.dataset.subject;
+    document.querySelectorAll(".subject-item").forEach(x=>x.classList.remove("active"));
+    s.classList.add("active");
+    document.getElementById("typeTabs").style.display="flex";
+    load();
 });
 
-document.querySelectorAll(".type-tab").forEach(tab => {
-    tab.addEventListener("click", () => {
-        selectedType = tab.dataset.type;
-
-        document.querySelectorAll(".type-tab").forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
-
-        if (selectedSubject) loadFiles();
-    });
+document.querySelectorAll(".type-tab").forEach(t=>t.onclick=()=>{
+    type=t.dataset.type;
+    document.querySelectorAll(".type-tab").forEach(x=>x.classList.remove("active"));
+    t.classList.add("active");
+    load();
 });
 
-async function loadFiles() {
-    const content = document.getElementById("contentArea");
-    content.innerHTML = `<div class="loading">جاري تحميل الملفات...</div>`;
-
-    const folder = `${selectedSubject}/${selectedType}`;
-    const url = `https://api.github.com/repos/${config.owner}/${config.repo}/contents/${folder}?ref=${config.branch}`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("تعذّر تحميل الملفات");
-
-        const data = await response.json();
-
-        const files = data.filter(item => item.type === "file");
-
-        if (files.length === 0) {
-            content.innerHTML = `<div class="empty-state">لا توجد ملفات حالياً 📭</div>`;
-            return;
-        }
-
-        renderTable(files);
-
-    } catch (err) {
-        content.innerHTML = `
-            <div class="alert alert-error">
-                ⚠️ تعذر تحميل الملفات – قد يكون المجلد فارغاً
-            </div>
-        `;
+async function load(){
+    const box=document.getElementById("contentArea");
+    box.innerHTML="جاري التحميل...";
+    try{
+        const res=await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${subject}/${type}?ref=${branch}`);
+        if(!res.ok) throw 0;
+        const files=(await res.json()).filter(f=>f.type==="file");
+        if(!files.length) return box.innerHTML="لا يوجد ملفات 📭";
+        
+        box.innerHTML=`<table class="lectures-table"><tbody>${
+            files.map((f,i)=>`
+                <tr>
+                    <td>${i+1}</td>
+                    <td>${f.name}</td>
+                    <td><a class="btn-download" href="${f.download_url}" download>⬇️</a></td>
+                </tr>`).join("")
+        }</tbody></table>`;
+    }catch{
+        box.innerHTML="خطأ في التحميل ⚠️";
     }
 }
-
-function renderTable(files) {
-    const rows = files.map((file, i) => `
-        <tr>
-            <td>${i + 1}</td>
-            <td>${file.name}</td>
-            <td>
-                <a class="btn-download" href="${file.download_url}" download="${file.name}">
-                    ⬇️ تحميل
-                </a>
-            </td>
-        </tr>
-    `).join("");
-
-    document.getElementById("contentArea").innerHTML = `
-        <table class="lectures-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>اسم الملف</th>
-                    <th>تحميل</th>
-                </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-        </table>
-    `;
-}
 </script>
+
+
 
 
 
