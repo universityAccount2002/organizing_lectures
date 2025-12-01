@@ -367,11 +367,9 @@
                 <table class="lectures-table">
                     <thead>
                         <tr>
-                            <th style="width: 50px;">#</th>
+                            <th>#</th>
                             <th>اسم الملف</th>
-                            <th style="width: 80px;">النوع</th>
-                            <th style="width: 100px;">الحجم</th>
-                            <th style="width: 100px;">الإجراء</th>
+                            <th>الإجراء</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -388,8 +386,6 @@
                             <span class="file-icon">${icon}</span>
                             ${file.name}
                         </td>
-                        <td>${extension}</td>
-                        <td>${formatFileSize(file.size)}</td>
                         <td>
                             <button class="btn-download" onclick="downloadFile('${file.download_url}', '${file.name}')">
                                 ⬇️ تحميل
